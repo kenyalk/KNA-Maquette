@@ -1,0 +1,130 @@
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #333;
+}
+
+header {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 15px;
+}
+
+section#products {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    background-color: #444;
+}
+
+.product {
+    text-align: center;
+    background-color: #555;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product img {
+    max-width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.product:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 12px rgba(255, 255, 255, 0.5);
+}
+
+/* Moderniser les boutons "Ajouter au panier" */
+.product button {
+    background: linear-gradient(to right, #ff7e5f, #feb47b);
+    border: none;
+    padding: 10px 20px;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 15px rgba(255, 125, 95, 0.4);
+}
+
+/* Bouton mini-panier flottant */
+#mini-cart {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    background: linear-gradient(to right, #4facfe, #00f2fe);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    font-size: 16px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#mini-cart:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 12px rgba(79, 172, 254, 0.5);
+}
+
+footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px;
+}
+
+.back-button button {
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    border: none;
+    padding: 12px 24px;
+    color: white;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.back-button button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 15px rgba(106, 17, 203, 0.5);
+}
+
+.back-button button {
+    background: linear-gradient(to right, #ff9966, #ff5e62);
+    border: none;
+    padding: 10px 25px;
+    color: white;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.back-button button:hover {
+    transform: scale(1.2);
+    box-shadow: 0 10px 20px rgba(255, 94, 98, 0.5);
+}

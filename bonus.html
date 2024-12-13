@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bonus - KNA</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #333;
+            color: white;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #222;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #FFD700;
+            font-weight: bold;
+        }
+
+        .wheel-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+        }
+
+        .wheel {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #ff7e5f 0deg, #feb47b 45deg,
+                #ffd700 90deg, #6a11cb 135deg,
+                #2575fc 180deg, #00c6ff 225deg, #ff7e5f 270deg, #feb47b 315deg
+            );
+            position: relative;
+        }
+
+        .wheel:after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .spin-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            border: none;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+        }
+
+        .spin-button:hover {
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #FFD700;
+        }
+
+        footer {
+            text-align: center;
+            background-color: #222;
+            color: white;
+            padding: 10px;
+            font-size: 14px;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>KNA - Bonus</h1>
+    </header>
+
+    <section class="wheel-container">
+        <div class="wheel"></div>
+        <button class="spin-button" id="spin-button">Tourner la roue</button>
+        <p class="result" id="result"></p>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 KNA. Tous droits réservés.</p>
+    </footer>
+
+    <script>
+        const spinButton = document.querySelector('#spin-button');
+        const resultDisplay = document.querySelector('#result');
+        const wheel = document.querySelector('.wheel');
+
+        // Réinitialise l'état de la roue à chaque chargement de page
+        localStorage.removeItem('wheelUsed');
+
+        function spinWheel() {
+            // Vérifiez si l'utilisateur a déjà utilisé la roue
+            if (localStorage.getItem('wheelUsed') === 'true') {
+                resultDisplay.textContent = 'Vous avez déjà tourné la roue. Rechargez la page pour rejouer.';
+                resultDisplay.style.color = 'red';
+                return;
+            }
+
+            const chance = Math.random() * 100;
+            const rotation = chance <= 8 ? Math.floor(Math.random() * 45) + 720 : Math.floor(Math.random() * 315 + 45) + 720;
+
+            wheel.style.transition = 'transform 3s ease-out';
+            wheel.style.transform = `rotate(${rotation}deg)`;
+
+            setTimeout(() => {
+                if (chance <= 8) {
+                    resultDisplay.textContent = 'Félicitations ! Voici votre code promo : KNA2024';
+                    resultDisplay.style.color = 'green';
+                } else {
+                    resultDisplay.textContent = 'Dommage, réessayez encore !';
+                    resultDisplay.style.color = 'white';
+                }
+
+                // Marquez la roue comme utilisée
+                localStorage.setItem('wheelUsed', 'true');
+            }, 3000);
+        }
+
+        spinButton.addEventListener('click', spinWheel);
+    </script>
+</body>
+</html>

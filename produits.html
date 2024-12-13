@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produits - KNA</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="cart.js"></script>
+    <style>
+        /* Ajout du style existant ici */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #333;
+            color: white;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background-color: #222;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #FFD700;
+            font-weight: bold;
+        }
+
+        .cart-button {
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            border: none;
+            padding: 10px 20px;
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .cart-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 15px rgba(255, 125, 95, 0.4);
+        }
+
+        #products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            background-color: #444;
+        }
+
+        .product {
+            text-align: center;
+            background-color: #555;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product img {
+            max-width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .product:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 12px rgba(255, 255, 255, 0.5);
+        }
+
+        .product button {
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            border: none;
+            padding: 10px 20px;
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .product button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 15px rgba(79, 172, 254, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Produits - KNA</h1>
+        <button class="cart-button" onclick="window.location.href='cart.html'">Panier (0)</button>
+    </header>
+    <section id="products">
+        <div class="product">
+            <a href="chaussettes.html">
+                <img src="images/A_premium_and_sporty_design_for_high_socks_packagi.jpg" alt="Chaussettes">
+                <h3>Chaussettes de sport KNA</h3>
+            </a>
+            <p>Prix : 19,99 € TTC</p>
+            <button onclick="addToCart('Chaussettes de sport KNA', 19.99, this)">Ajouter au panier</button>
+        </div>
+        <div class="product">
+            <a href="gourde.html">
+                <img src="images/Design_three_distinct_versions_of_a_premium_sports.jpg" alt="Gourde">
+                <h3>Gourde KNA</h3>
+            </a>
+            <p>Prix : 15,99 € TTC</p>
+            <button onclick="addToCart('Gourde KNA', 15.99, this)">Ajouter au panier</button>
+        </div>
+        <div class="product">
+            <a href="genouillere.html">
+                <img src="https://sbd.fr/wp-content/uploads/2023/05/7mm-Powerlifting-Knee-Sleeves-04-with-Snipe.jpg" alt="Genouillère">
+                <h3>Genouillère</h3>
+            </a>
+            <p>Prix : 99,00 € TTC</p>
+            <button onclick="addToCart('Genouillère', 99.00, this)">Ajouter au panier</button>
+        </div>
+        <div class="product">
+            <a href="ecouteur.html">
+                <img src="images/A_sleek_and_modern_design_for_wireless_Bluetooth_e.jpg" alt="Écouteurs">
+                <h3>Écouteurs KNA</h3>
+            </a>
+            <p>Prix : 79,99 € TTC</p>
+            <button onclick="addToCart('Écouteurs KNA', 79.99, this)">Ajouter au panier</button>
+        </div>
+        <div class="product">
+            <a href="ceinture.html">
+                <img src="https://sbd.fr/wp-content/uploads/2023/11/10mm-Lever-Belt-01-with-Snipe.jpg" alt="Ceinture de force">
+                <h3>Ceinture de force</h3>
+            </a>
+            <p>Prix : 259,99 € TTC</p>
+            <button onclick="addToCart('Ceinture de force', 259.99, this)">Ajouter au panier</button>
+        </div>
+        <div class="product">
+            <a href="creatine.html">
+                <img src="images/A_sleek_and_professional_creatine_supplement_conta.jpg" alt="Créatine">
+                <h3>Créatine KNA</h3>
+            </a>
+            <p>Prix : 29,99 € TTC</p>
+            <button onclick="addToCart('Créatine KNA', 29.99, this)">Ajouter au panier</button>
+        </div>
+        <div class="product">
+            <a href="Whey.html">
+                <img src="images/A_sleek_and_professional_design_for_a_whey_protein.jpg" alt="Whey">
+                <h3>Whey KNA</h3>
+            </a>
+            <p>Prix : 49,99 € TTC</p>
+            <button onclick="addToCart('Whey KNA', 49.99, this)">Ajouter au panier</button>
+        </div>
+    </section>
+    <footer>
+        <p>&copy; 2024 KNA. Tous droits réservés.</p>
+    </footer>
+</body>
+</html>

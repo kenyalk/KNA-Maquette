@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salles de sport proches</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #333;
+            color: white;
+            text-align: center;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: #222;
+            color: #FFD700;
+            font-size: 28px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        #search-form {
+            margin: 30px auto;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #city-input {
+            width: 70%;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        #search-button {
+            padding: 12px 25px;
+            font-size: 18px;
+            border: none;
+            background: linear-gradient(to right, #4caf50, #388e3c);
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            font-weight: bold;
+        }
+
+        #search-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 15px rgba(79, 172, 254, 0.5);
+        }
+
+        #results {
+            margin: 30px auto;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .gym {
+            background-color: #444;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            animation: fadeIn 0.5s ease;
+            text-align: left;
+        }
+
+        .gym h3 {
+            margin: 0;
+            font-size: 20px;
+            color: #FFD700;
+        }
+
+        .gym p {
+            margin: 5px 0 0;
+            font-size: 16px;
+            color: #ccc;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .home-button {
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .home-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 15px rgba(255, 125, 95, 0.4);
+        }
+
+        footer {
+            text-align: center;
+            padding: 15px;
+            background-color: #222;
+            color: white;
+            font-size: 14px;
+            border-top: 2px solid #FFD700;
+        }
+    </style>
+    <script>
+        async function searchGyms() {
+            const city = document.getElementById('city-input').value.trim();
+            const resultsContainer = document.getElementById('results');
+            resultsContainer.innerHTML = '';
+
+            if (!city) {
+                resultsContainer.innerHTML = '<p>Veuillez entrer une ville.</p>';
+                return;
+            }
+
+            try {
+                const geocodeResponse = await fetch(`https://nominatim.openstreetmap.org/search?city=${encodeURIComponent(city)}&format=json`);
+                const geocodeData = await geocodeResponse.json();
+
+                if (!geocodeData || geocodeData.length === 0) {
+                    resultsContainer.innerHTML = `<p>Aucune donnée trouvée pour "${city}".</p>`;
+                    return;
+                }
+
+                const { lat, lon } = geocodeData[0];
+
+                const overpassQuery = `
+                    [out:json];
+                    node["leisure"="fitness_centre"](around:5000,${lat},${lon});
+                    out tags;
+                `;
+                const overpassResponse = await fetch(`https://overpass-api.de/api/interpreter?data=${encodeURIComponent(overpassQuery)}`);
+                const overpassData = await overpassResponse.json();
+
+                if (!overpassData.elements || overpassData.elements.length === 0) {
+                    resultsContainer.innerHTML = `<p>Aucune salle de sport trouvée près de "${city}".</p>`;
+                    return;
+                }
+
+                overpassData.elements.forEach(place => {
+                    const gymDiv = document.createElement('div');
+                    const address = place.tags['addr:street']
+                        ? `${place.tags['addr:street']}, ${place.tags['addr:city'] || ''}`
+                        : 'Adresse non disponible';
+
+                    gymDiv.classList.add('gym');
+                    gymDiv.innerHTML = `
+                        <h3>${place.tags.name || 'Salle de sport'}</h3>
+                        <p>${address}</p>
+                    `;
+                    resultsContainer.appendChild(gymDiv);
+                });
+            } catch (error) {
+                console.error("Erreur lors de la recherche :", error);
+                resultsContainer.innerHTML = '<p>Une erreur est survenue. Veuillez réessayer plus tard.</p>';
+            }
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <div>Salles de sport proches</div>
+        <button class="home-button" onclick="window.location.href='index.html'">Retour à l'accueil</button>
+    </header>
+    <div id="search-form">
+        <input type="text" id="city-input" placeholder="Entrez votre ville">
+        <button id="search-button" onclick="searchGyms()">Rechercher</button>
+    </div>
+    <div id="results"></div>
+    <footer>
+        &copy; 2024 KNA. Tous droits réservés.
+    </footer>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panier - KNA</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="cart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #333;
+            color: white;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+            background-color: #222;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #FFD700;
+            font-weight: bold;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-buttons button {
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .nav-buttons button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 15px rgba(79, 172, 254, 0.5);
+        }
+
+        #cart {
+            padding: 20px;
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #444;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        #cart-display {
+            margin-bottom: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #555;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .cart-item img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-right: 15px;
+        }
+
+        .cart-item-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cart-item span {
+            font-size: 16px;
+        }
+
+        .cart-item button {
+            background: linear-gradient(to right, #e63946, #d62828);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .cart-item button:hover {
+            background: linear-gradient(to right, #d62828, #e63946);
+        }
+
+        #promo-code {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 16px;
+        }
+
+        #apply-promo {
+            background: linear-gradient(to right, #4caf50, #388e3c);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        #apply-promo:hover {
+            background: linear-gradient(to right, #388e3c, #4caf50);
+        }
+
+        #promo-message {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        #total-display {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        footer {
+            text-align: center;
+            background-color: #222;
+            color: white;
+            padding: 10px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Panier - KNA</h1>
+        <div class="nav-buttons">
+            <button onclick="window.location.href='index.html'">Retour à l'accueil</button>
+            <button onclick="window.location.href='produits.html'">Voir les produits</button>
+        </div>
+    </header>
+    <section id="cart">
+        <div id="cart-display"></div>
+        <div>
+            <input type="text" id="promo-code" placeholder="Entrez votre code promo">
+            <button id="apply-promo" onclick="applyPromo()">Appliquer le code</button>
+            <p id="promo-message"></p>
+        </div>
+        <p id="total-display">Total : 0,00 €</p>
+    </section>
+    <footer>
+        <p>&copy; 2024 KNA. Tous droits réservés.</p>
+    </footer>
+    <script>
+        const productImages = {
+            "Chaussettes de sport KNA": "images/A_premium_and_sporty_design_for_high_socks_packagi.jpg",
+            "Gourde KNA": "images/Design_three_distinct_versions_of_a_premium_sports.jpg",
+            "Genouillère": "https://sbd.fr/wp-content/uploads/2023/05/7mm-Powerlifting-Knee-Sleeves-04-with-Snipe.jpg",
+            "Écouteurs KNA": "images/A_sleek_and_modern_design_for_wireless_Bluetooth_e.jpg",
+            "Ceinture de force": "https://sbd.fr/wp-content/uploads/2023/11/10mm-Lever-Belt-01-with-Snipe.jpg",
+            "Créatine KNA": "images/A_sleek_and_professional_creatine_supplement_conta.jpg",
+            "Whey KNA": "images/A_sleek_and_professional_design_for_a_whey_protein.jpg"
+        };
+
+        function updateCartDisplay() {
+            const cartDisplay = document.getElementById('cart-display');
+            const totalDisplay = document.getElementById('total-display');
+            cartDisplay.innerHTML = '';
+
+            if (cart.length === 0) {
+                cartDisplay.innerHTML = '<p>Votre panier est vide.</p>';
+            } else {
+                cart.forEach((item, index) => {
+                    const cartItem = document.createElement('div');
+                    cartItem.classList.add('cart-item');
+
+                    const productImage = productImages[item.name] || 'images/default.png';
+
+                    cartItem.innerHTML = `
+                        <div class="cart-item-info">
+                            <img src="${productImage}" alt="${item.name}">
+                            <span>${item.name} (x${item.quantity})</span>
+                        </div>
+                        <span>${(item.price * item.quantity).toFixed(2)} €</span>
+                        <button onclick="removeFromCart(${index})">Supprimer</button>
+                    `;
+                    cartDisplay.appendChild(cartItem);
+                });
+            }
+
+            const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            let discountedTotal = total;
+
+            if (appliedPromo) {
+                discountedTotal = total - (total * appliedPromo / 100);
+            }
+
+            totalDisplay.textContent = `Total : ${discountedTotal.toFixed(2)} €`;
+        }
+    </script>
+</body>
+</html>
